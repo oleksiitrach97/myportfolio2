@@ -145,11 +145,11 @@ function BookCallDialog({ children }: { children: ReactNode }) {
   };
 
   const handleLinkedin = () => {
-    window.open("https://linkedin.com/in/yourprofile", "_blank");
+    window.open("https://linkedin.com/in/realtopman", "_blank", "noopener,noreferrer");
   };
 
   const handleGithub = () => {
-    window.open("https://github.com/realtopman", "_blank");
+    window.open("https://github.com/realtopman", "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -435,7 +435,12 @@ function Nav() {
 
 function Hero() {
   return (
-    <section id="home" className="pt-36 pb-16 text-center px-4">
+    <section id="home" className="relative overflow-hidden pt-36 pb-16 text-center px-4">
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="hero-orb hero-orb--pink" />
+        <div className="hero-orb hero-orb--cyan" />
+        <div className="hero-orb hero-orb--emerald" />
+      </div>
       <img
         src={avatar}
         alt="AI developer avatar"
@@ -456,9 +461,9 @@ function Hero() {
 
       <div className="mt-10 max-w-xl mx-auto glow-card rounded-3xl p-6 text-left transition duration-500 hover:-translate-y-1 hover:shadow-[0_20px_70px_rgba(59,130,246,0.25)]">
         <div className="flex flex-col gap-4">
-          <p className="text-sm text-muted-foreground mb-3">Ask me anything about Alex…</p>
+          <p className="text-sm text-muted-foreground mb-3">Let's explore how I can help your project ✨</p>
           <div className="flex flex-wrap gap-2 mb-4">
-            {['Skills', 'Experience', 'Projects', 'Contact'].map((t) => (
+            {['Roadmap', 'Pricing', 'Past results', 'Contact'].map((t) => (
               <button
                 key={t}
                 className="text-xs px-3 py-1.5 rounded-full bg-secondary/60 border border-border hover:border-primary/50 transition"
