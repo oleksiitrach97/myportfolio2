@@ -444,21 +444,24 @@ function Hero() {
         className="mx-auto rounded-full border border-white/10 shadow-[0_0_30px_rgba(59,130,246,0.15)] ring-2 ring-cyan-400/10 animate-pulse"
       />
       <h1 className="mt-6 text-4xl md:text-5xl font-bold">
-        Hi, I'm{' '}
+        Hi, I'm{" "}
         <span className="bg-gradient-to-r from-fuchsia-400 via-cyan-300 to-emerald-400 bg-clip-text text-transparent shadow-[0_0_18px_rgba(168,85,247,0.35)] animate-pulse">
           Alex Carter
         </span>
       </h1>
       <div className="mx-auto mt-4 h-1.5 w-24 rounded-full bg-gradient-to-r from-fuchsia-400 via-cyan-300 to-emerald-400 blur-xl opacity-80" />
       <p className="mt-4 text-muted-foreground max-w-xl mx-auto text-sm md:text-base leading-7">
-        Fullstack AI Developer &mdash; Gene AI, n8n, RAG, AWS Bedrock, AI Voice Agents and AI SaaS developer with 8+ years building production-ready systems. I design AI agents, RAG pipelines, and voice bots that scale and deliver measurable ROI.
+        Fullstack AI Developer &mdash; Gene AI, n8n, RAG, AWS Bedrock, AI Voice Agents and AI SaaS
+        developer with 8+ years building production-ready systems.
       </p>
 
       <div className="mt-10 max-w-xl mx-auto glow-card rounded-3xl p-6 text-left transition duration-500 hover:-translate-y-1 hover:shadow-[0_20px_70px_rgba(59,130,246,0.25)]">
         <div className="flex flex-col gap-4">
-          <p className="text-sm text-muted-foreground mb-3">Ask me anything about Alex…</p>
+          <p className="text-sm text-muted-foreground mb-3">
+            Let's explore how I can help your project ✨
+          </p>
           <div className="flex flex-wrap gap-2 mb-4">
-            {['Skills', 'Experience', 'Projects', 'Contact'].map((t) => (
+            {["Roadmap", "Pricing", "Past results", "Contact"].map((t) => (
               <button
                 key={t}
                 className="text-xs px-3 py-1.5 rounded-full bg-secondary/60 border border-border hover:border-primary/50 transition"
@@ -477,6 +480,24 @@ function Hero() {
               Ask →
             </button>
           </div>
+          <div className="mt-4 flex flex-wrap items-center gap-3">
+            {["LLM", "Voice", "RAG", "Automation", "Cloud"].map((tag) => (
+              <span
+                key={tag}
+                className="inline-flex items-center rounded-full border border-border/70 bg-slate-950/80 px-3 py-1 text-[11px] uppercase tracking-[0.2em] text-muted-foreground shadow-sm shadow-slate-950/20 transition hover:border-primary/60 hover:text-white"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+          <div className="mt-5 flex flex-wrap items-center gap-3">
+            <button className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 px-5 py-2 text-sm font-semibold text-black shadow-lg shadow-cyan-500/20 transition hover:scale-[1.03] hover:shadow-[0_0_26px_rgba(34,211,238,0.35)]">
+              Book a call
+            </button>
+            <button className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-slate-950/80 px-4 py-2 text-sm text-muted-foreground transition hover:border-primary/60 hover:text-white">
+              View projects
+            </button>
+          </div>
         </div>
       </div>
     </section>
@@ -488,10 +509,15 @@ function About() {
     <section id="about" className="max-w-5xl mx-auto px-4 py-16">
       <div className="grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
         <div className="rounded-[32px] border border-white/10 bg-slate-950/80 p-6 shadow-[0_20px_60px_rgba(15,23,42,0.35)]">
-          <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground mb-3">What I build</p>
-          <h3 className="text-2xl font-semibold text-white mb-4">AI systems that work in production</h3>
+          <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground mb-3">
+            What I build
+          </p>
+          <h3 className="text-2xl font-semibold text-white mb-4">
+            AI systems that work in production
+          </h3>
           <p className="text-sm text-muted-foreground leading-7">
-            I create real-world AI solutions for businesses, from voice bots and agents to RAG SaaS workflows.
+            I create real-world AI solutions for businesses, from voice bots and agents to RAG SaaS
+            workflows.
           </p>
           <div className="mt-8 grid gap-3">
             <div className="flex items-center gap-3 rounded-2xl border border-border/60 bg-slate-900/70 p-4 transition hover:border-primary/60 hover:bg-slate-800/80">
@@ -508,30 +534,114 @@ function About() {
                 <Brain className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">Approach</p>
+                <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">
+                  Approach
+                </p>
                 <p className="text-sm text-white">Data-driven, production-ready AI</p>
               </div>
+            </div>
+          </div>
+          <div className="mt-6 rounded-3xl border border-border/60 bg-slate-900/70 p-4 backdrop-blur-xl shadow-[0_16px_40px_rgba(15,23,42,0.2)]">
+            <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground mb-3">
+              Services I offer
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <div className="flex items-center gap-2 rounded-2xl border border-border/50 bg-slate-950/70 px-3 py-2 text-[11px] text-white transition hover:border-primary/60 hover:bg-slate-900/90">
+                <div className="grid h-8 w-8 place-items-center rounded-2xl bg-fuchsia-500/10 text-fuchsia-300">
+                  <Code2 className="h-4 w-4" />
+                </div>
+                <div>
+                  <p className="font-semibold">Custom AI Solutions</p>
+                  <span className="text-[11px] text-muted-foreground">
+                    Chatbots, voice assistants, AI agents, SaaS
+                  </span>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 rounded-2xl border border-border/50 bg-slate-950/70 px-3 py-2 text-[11px] text-white transition hover:border-cyan-400/60 hover:bg-slate-900/90">
+                <div className="grid h-8 w-8 place-items-center rounded-2xl bg-cyan-500/10 text-cyan-300">
+                  <Brain className="h-4 w-4" />
+                </div>
+                <div>
+                  <p className="font-semibold">RAG & Knowledge</p>
+                  <span className="text-[11px] text-muted-foreground">
+                    Knowledge bases and semantic search
+                  </span>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 rounded-2xl border border-border/50 bg-slate-950/70 px-3 py-2 text-[11px] text-white transition hover:border-emerald-400/60 hover:bg-slate-900/90">
+                <div className="grid h-8 w-8 place-items-center rounded-2xl bg-emerald-500/10 text-emerald-300">
+                  <Link2 className="h-4 w-4" />
+                </div>
+                <div>
+                  <p className="font-semibold">Workflow Automation</p>
+                  <span className="text-[11px] text-muted-foreground">
+                    n8n, Zapier, Make integrations
+                  </span>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 rounded-2xl border border-border/50 bg-slate-950/70 px-3 py-2 text-[11px] text-white transition hover:border-orange-400/60 hover:bg-slate-900/90">
+                <div className="grid h-8 w-8 place-items-center rounded-2xl bg-orange-500/10 text-orange-300">
+                  <Sparkles className="h-4 w-4" />
+                </div>
+                <div>
+                  <p className="font-semibold">Full-Stack AI Apps</p>
+                  <span className="text-[11px] text-muted-foreground">
+                    Web, mobile, cloud-integrated
+                  </span>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 rounded-2xl border border-border/50 bg-slate-950/70 px-3 py-2 text-[11px] text-white transition hover:border-yellow-400/60 hover:bg-slate-900/90">
+                <div className="grid h-8 w-8 place-items-center rounded-2xl bg-yellow-500/10 text-yellow-300">
+                  <Trophy className="h-4 w-4" />
+                </div>
+                <div>
+                  <p className="font-semibold">AI Deployment</p>
+                  <span className="text-[11px] text-muted-foreground">
+                    Cloud hosting, APIs, secure microservices
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div className="mt-4 grid gap-3 sm:grid-cols-3">
+              {[
+                { label: "ROI Focused", icon: "⚡" },
+                { label: "Fast Delivery", icon: "🚀" },
+                { label: "Enterprise Ready", icon: "🔒" },
+              ].map((item) => (
+                <div
+                  key={item.label}
+                  className="flex flex-col items-center justify-center text-center rounded-2xl border border-border/50 bg-slate-950/70 px-4 py-3 text-sm text-white transition hover:-translate-y-1 hover:border-primary/60 hover:bg-slate-900/90"
+                >
+                  <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-1">
+                    {item.icon}
+                  </p>
+                  <p className="font-semibold">{item.label}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
         <div className="grid gap-5">
           <div className="grid gap-5 sm:grid-cols-2">
-            <div className="group rounded-3xl border border-border/70 bg-slate-900/70 p-5 backdrop-blur-xl shadow-[0_16px_40px_rgba(15,23,42,0.25)] transition hover:-translate-y-1 hover:border-primary/70">
-              <div className="flex items-center gap-3 mb-4">
+            <div className="group flex h-full flex-col items-center justify-center text-center rounded-3xl border border-border/70 bg-slate-900/70 p-5 backdrop-blur-xl shadow-[0_16px_40px_rgba(15,23,42,0.25)] transition hover:-translate-y-1 hover:border-primary/70">
+              <div className="flex flex-col items-center gap-3 mb-4">
                 <div className="grid h-11 w-11 place-items-center rounded-2xl bg-violet-500/10 text-violet-300 group-hover:bg-violet-500/15 transition">
                   <Code2 className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">AI Agents</p>
+                  <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">
+                    AI Agents
+                  </p>
                   <h4 className="text-lg font-semibold text-white">Agents & Voice Bots</h4>
                 </div>
               </div>
               <p className="text-sm text-muted-foreground leading-6">
-                CrewAI, AutoGen, Amazon Polly, Deepgram, and conversational workflows for powerful automation.
+                CrewAI, AutoGen, Amazon Polly, Deepgram, and conversational workflows for powerful
+                automation.
               </p>
             </div>
-            <div className="group rounded-3xl border border-border/70 bg-slate-900/70 p-5 backdrop-blur-xl shadow-[0_16px_40px_rgba(15,23,42,0.25)] transition hover:-translate-y-1 hover:border-cyan-400/70">
-              <div className="flex items-center gap-3 mb-4">
+            <div className="group flex h-full flex-col items-center justify-center text-center rounded-3xl border border-border/70 bg-slate-900/70 p-5 backdrop-blur-xl shadow-[0_16px_40px_rgba(15,23,42,0.25)] transition hover:-translate-y-1 hover:border-cyan-400/70">
+              <div className="flex flex-col items-center gap-3 mb-4">
                 <div className="grid h-11 w-11 place-items-center rounded-2xl bg-cyan-500/10 text-cyan-300 group-hover:bg-cyan-500/15 transition">
                   <Brain className="h-5 w-5" />
                 </div>
@@ -541,27 +651,31 @@ function About() {
                 </div>
               </div>
               <p className="text-sm text-muted-foreground leading-6">
-                LangChain, LlamaIndex, Pinecone, FAISS, ChromaDB — end-to-end retrieval and memory systems.
+                LangChain, LlamaIndex, Pinecone, FAISS, ChromaDB — end-to-end retrieval and memory
+                systems.
               </p>
             </div>
           </div>
           <div className="grid gap-5 sm:grid-cols-2">
-            <div className="group rounded-3xl border border-border/70 bg-slate-900/70 p-5 backdrop-blur-xl shadow-[0_16px_40px_rgba(15,23,42,0.25)] transition hover:-translate-y-1 hover:border-emerald-400/70">
-              <div className="flex items-center gap-3 mb-4">
+            <div className="group flex h-full flex-col items-center justify-center text-center rounded-3xl border border-border/70 bg-slate-900/70 p-5 backdrop-blur-xl shadow-[0_16px_40px_rgba(15,23,42,0.25)] transition hover:-translate-y-1 hover:border-emerald-400/70">
+              <div className="flex flex-col items-center gap-3 mb-4">
                 <div className="grid h-11 w-11 place-items-center rounded-2xl bg-emerald-500/10 text-emerald-300 group-hover:bg-emerald-500/15 transition">
                   <Link2 className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">Automation</p>
+                  <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">
+                    Automation
+                  </p>
                   <h4 className="text-lg font-semibold text-white">SaaS & Workflows</h4>
                 </div>
               </div>
               <p className="text-sm text-muted-foreground leading-6">
-                n8n, Zapier, Make, and API-first integrations designed to automate real business work.
+                n8n, Zapier, Make, and API-first integrations designed to automate real business
+                work.
               </p>
             </div>
-            <div className="group rounded-3xl border border-border/70 bg-slate-900/70 p-5 backdrop-blur-xl shadow-[0_16px_40px_rgba(15,23,42,0.25)] transition hover:-translate-y-1 hover:border-orange-400/70">
-              <div className="flex items-center gap-3 mb-4">
+            <div className="group flex h-full flex-col items-center justify-center text-center rounded-3xl border border-border/70 bg-slate-900/70 p-5 backdrop-blur-xl shadow-[0_16px_40px_rgba(15,23,42,0.25)] transition hover:-translate-y-1 hover:border-orange-400/70">
+              <div className="flex flex-col items-center gap-3 mb-4">
                 <div className="grid h-11 w-11 place-items-center rounded-2xl bg-orange-500/10 text-orange-300 group-hover:bg-orange-500/15 transition">
                   <Trophy className="h-5 w-5" />
                 </div>
@@ -571,7 +685,8 @@ function About() {
                 </div>
               </div>
               <p className="text-sm text-muted-foreground leading-6">
-                AWS Bedrock, Lambda, Docker, Kubernetes and CI/CD pipelines for scalable AI delivery.
+                AWS Bedrock, Lambda, Docker, Kubernetes and CI/CD pipelines for scalable AI
+                delivery.
               </p>
             </div>
           </div>
@@ -579,9 +694,12 @@ function About() {
       </div>
       <div className="mt-10 rounded-3xl border border-border/70 bg-slate-950/80 p-6 shadow-[0_20px_60px_rgba(15,23,42,0.18)] flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground mb-2">Profile highlights</p>
+          <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground mb-2">
+            Profile highlights
+          </p>
           <p className="text-sm text-muted-foreground leading-6">
-            8+ years building AI-driven SaaS, voice agents, RAG systems, and cloud-scale products with a focus on ROI and reliability.
+            8+ years building AI-driven SaaS, voice agents, RAG systems, and cloud-scale products
+            with a focus on ROI and reliability.
           </p>
         </div>
         <div className="grid gap-3 sm:grid-cols-2">
