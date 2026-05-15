@@ -447,7 +447,7 @@ function Hero() {
         Hi, I'm <span className="text-gradient">Alex Carter</span>
       </h1>
       <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
-        AI developer building intelligent systems — from LLM agents to computer vision pipelines.
+        Fullstack AI Developer &mdash; Gene AI, n8n, RAG, AWS Bedrock, AI Voice Agents and AI SaaS developer with 8+ years building production-ready systems. I design AI agents, RAG pipelines, and voice bots that scale and deliver measurable ROI.
       </p>
 
       <div className="mt-10 max-w-xl mx-auto glow-card rounded-3xl p-6 text-left">
@@ -479,18 +479,20 @@ function About() {
   return (
     <section id="about" className="max-w-5xl mx-auto px-4 py-16 grid md:grid-cols-2 gap-5">
       <div className="glow-card rounded-3xl p-6">
-        <h3 className="font-semibold text-lg mb-2">Mindset</h3>
-        <p className="text-sm text-muted-foreground">
-          Building more than software. I obsess over the discipline and focus needed to ship
-          reliable AI systems that real users trust.
-        </p>
+        <h3 className="font-semibold text-lg mb-2">What I Do</h3>
+        <div className="text-sm text-muted-foreground space-y-2">
+          <p>• Build AI Agents & Voice Bots (CrewAI, AutoGen, Polly, Deepgram)</p>
+          <p>• Design LLM + RAG systems (LangChain, LlamaIndex, Pinecone, FAISS)</p>
+          <p>• Develop AI SaaS & automations (n8n, Zapier, cloud APIs)</p>
+        </div>
       </div>
       <div className="glow-card rounded-3xl p-6">
-        <h3 className="font-semibold text-lg mb-2">Craft</h3>
-        <p className="text-sm text-muted-foreground">
-          From research papers to production. I bridge ML, backend and product to deliver
-          experiences that feel magical and stay reliable.
-        </p>
+        <h3 className="font-semibold text-lg mb-2">Services</h3>
+        <div className="text-sm text-muted-foreground space-y-2">
+          <p>• Custom AI solutions: chatbots, agents, voice assistants</p>
+          <p>• RAG & knowledge pipelines: indexing, vector DBs, search</p>
+          <p>• Deployment & scaling: AWS Bedrock, Docker, CI/CD</p>
+        </div>
       </div>
       <div className="glow-card rounded-3xl p-6 md:col-span-2 flex flex-wrap items-center gap-4 justify-between">
         <div>
