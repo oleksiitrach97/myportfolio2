@@ -261,6 +261,122 @@
   animation: role-pop 460ms ease both;
 }
 
+.hero-arch {
+  position: absolute;
+  top: 5.5rem;
+  left: 50%;
+  z-index: -1;
+  width: min(920px, 118vw);
+  height: 460px;
+  transform: translateX(-50%);
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+.hero-arch__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  fill: none;
+}
+
+.hero-arch__halo {
+  stroke: oklch(0.74 0.17 205 / 0.16);
+  stroke-width: 24;
+  filter: blur(18px);
+}
+
+.hero-arch__line {
+  stroke-linecap: round;
+  stroke-dasharray: 1050;
+  stroke-dashoffset: 1050;
+  animation: arch-draw 1.7s cubic-bezier(0.2, 0.8, 0.2, 1) 240ms forwards;
+}
+
+.hero-arch__line--outer {
+  stroke: oklch(0.82 0.12 205 / 0.7);
+  stroke-width: 2.2;
+  filter: drop-shadow(0 0 16px oklch(0.74 0.17 205 / 0.35));
+}
+
+.hero-arch__line--inner {
+  stroke: oklch(0.76 0.17 285 / 0.32);
+  stroke-width: 1.4;
+  animation-delay: 520ms;
+}
+
+.hero-arch__node {
+  position: absolute;
+  left: 50%;
+  top: 42%;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 9999px;
+  background: oklch(0.88 0.12 190);
+  box-shadow:
+    0 0 18px oklch(0.82 0.15 190 / 0.9),
+    0 0 40px oklch(0.74 0.16 205 / 0.45);
+  transform-origin: 0 172px;
+  animation: arch-orbit 7s linear infinite;
+}
+
+.hero-arch__node--one {
+  animation-delay: -0.4s;
+}
+
+.hero-arch__node--two {
+  width: 0.48rem;
+  height: 0.48rem;
+  background: oklch(0.82 0.15 285);
+  animation-duration: 9s;
+  animation-delay: -3s;
+}
+
+.hero-arch__node--three {
+  width: 0.42rem;
+  height: 0.42rem;
+  background: oklch(0.84 0.14 160);
+  animation-duration: 11s;
+  animation-delay: -6.5s;
+}
+
+.hero-arch__rung {
+  position: absolute;
+  bottom: 4rem;
+  width: 1px;
+  height: 150px;
+  background: linear-gradient(to bottom, transparent, oklch(0.78 0.13 205 / 0.36), transparent);
+  box-shadow: 0 0 22px oklch(0.72 0.15 205 / 0.22);
+}
+
+.hero-arch__rung--left {
+  left: 21%;
+  transform: rotate(13deg);
+}
+
+.hero-arch__rung--right {
+  right: 21%;
+  transform: rotate(-13deg);
+}
+
+.hero-console-arch {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-console-arch::before {
+  content: "";
+  position: absolute;
+  inset: -1px 14% auto;
+  height: 58px;
+  border-top: 1px solid oklch(0.82 0.12 205 / 0.34);
+  border-radius: 9999px 9999px 0 0;
+  pointer-events: none;
+  box-shadow: 0 -18px 48px oklch(0.74 0.16 205 / 0.12);
+}
+
 [data-reveal] {
   opacity: 0;
   transform: translateY(22px);
@@ -415,6 +531,33 @@
   }
 }
 
+@keyframes arch-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes arch-orbit {
+  0% {
+    transform: rotate(218deg) translateY(-172px) scale(0.8);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  50% {
+    transform: rotate(360deg) translateY(-172px) scale(1);
+    opacity: 1;
+  }
+  88% {
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(502deg) translateY(-172px) scale(0.8);
+    opacity: 0;
+  }
+}
+
 @layer utilities {
   @keyframes animate-fade-in {
     animation: fade-in 0.6s ease-out forwards;
@@ -452,5 +595,14 @@
 
   .pointer-spotlight {
     display: none;
+  }
+
+  .hero-arch__line,
+  .hero-arch__node {
+    animation: none;
+  }
+
+  .hero-arch__line {
+    stroke-dashoffset: 0;
   }
 }

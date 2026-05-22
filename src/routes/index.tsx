@@ -155,6 +155,29 @@ function HeroRoleRotator() {
   );
 }
 
+function HeroArchEffect() {
+  return (
+    <div className="hero-arch" aria-hidden="true">
+      <svg className="hero-arch__svg" viewBox="0 0 900 430" role="presentation">
+        <path className="hero-arch__halo" d="M90 370C160 125 305 45 450 45s290 80 360 325" />
+        <path
+          className="hero-arch__line hero-arch__line--outer"
+          d="M90 370C160 125 305 45 450 45s290 80 360 325"
+        />
+        <path
+          className="hero-arch__line hero-arch__line--inner"
+          d="M176 364C230 180 330 112 450 112s220 68 274 252"
+        />
+      </svg>
+      <span className="hero-arch__node hero-arch__node--one" />
+      <span className="hero-arch__node hero-arch__node--two" />
+      <span className="hero-arch__node hero-arch__node--three" />
+      <span className="hero-arch__rung hero-arch__rung--left" />
+      <span className="hero-arch__rung hero-arch__rung--right" />
+    </div>
+  );
+}
+
 function BookCallDialog({ children }: { children: ReactNode }) {
   const today = new Date();
   const [currentMonth, setCurrentMonth] = useState(
@@ -536,6 +559,7 @@ function Hero() {
     >
       <div className="hero-grid absolute inset-x-0 top-0 -z-10 mx-auto h-[740px] max-w-7xl opacity-80" />
       <div className="absolute left-1/2 top-32 -z-10 h-72 w-72 -translate-x-1/2 rounded-full bg-cyan-400/10 blur-3xl" />
+      <HeroArchEffect />
       <div className="relative mx-auto h-[156px] w-[156px]">
         <div className="absolute inset-0 rounded-full border border-cyan-300/25 shadow-[0_0_70px_rgba(34,211,238,0.18)]" />
         <div className="absolute inset-4 rounded-full border border-violet-400/20" />
@@ -566,7 +590,7 @@ function Hero() {
         leverage.
       </p>
 
-      <div className="mx-auto mt-10 max-w-2xl rounded-[28px] border border-cyan-300/20 bg-slate-950/70 p-6 text-left shadow-[0_28px_90px_rgba(3,7,18,0.55),0_0_55px_rgba(34,211,238,0.08)] backdrop-blur-xl">
+      <div className="hero-console-arch mx-auto mt-10 max-w-2xl rounded-[28px] border border-cyan-300/20 bg-slate-950/70 p-6 text-left shadow-[0_28px_90px_rgba(3,7,18,0.55),0_0_55px_rgba(34,211,238,0.08)] backdrop-blur-xl">
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
