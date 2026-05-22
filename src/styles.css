@@ -215,6 +215,106 @@
   box-shadow: 0 10px 40px -10px oklch(0.55 0.2 295 / 0.3);
 }
 
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 80;
+  height: 3px;
+  width: 100%;
+  transform-origin: left;
+  background: linear-gradient(90deg, oklch(0.78 0.18 250), oklch(0.8 0.2 168));
+  box-shadow: 0 0 22px oklch(0.78 0.18 250 / 0.55);
+}
+
+.pointer-spotlight {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 240ms ease;
+  background: radial-gradient(
+    440px circle at var(--pointer-x, 50%) var(--pointer-y, 35%),
+    oklch(0.72 0.16 205 / 0.13),
+    transparent 58%
+  );
+  mix-blend-mode: screen;
+}
+
+.has-pointer .pointer-spotlight {
+  opacity: 1;
+}
+
+.hero-rotator {
+  display: inline-flex;
+  min-width: 13rem;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 1px solid oklch(0.75 0.14 205 / 0.22);
+  background: linear-gradient(135deg, oklch(0.2 0.04 260 / 0.75), oklch(0.24 0.06 285 / 0.55));
+  padding: 0.45rem 0.9rem;
+  color: oklch(0.92 0.09 195);
+  box-shadow:
+    0 0 28px oklch(0.72 0.15 205 / 0.13),
+    inset 0 1px 0 oklch(1 0 0 / 0.08);
+  animation: role-pop 460ms ease both;
+}
+
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(22px);
+  filter: blur(8px);
+  transition:
+    opacity 700ms ease,
+    transform 700ms ease,
+    filter 700ms ease;
+}
+
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+.reveal-card {
+  will-change: transform, opacity;
+}
+
+.glow-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.glow-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 280ms ease;
+  background: radial-gradient(
+    520px circle at 12% 0%,
+    oklch(0.74 0.18 205 / 0.12),
+    transparent 44%
+  );
+}
+
+.glow-card:hover::before {
+  opacity: 1;
+}
+
+.glow-card img {
+  transition:
+    transform 600ms ease,
+    filter 600ms ease;
+}
+
+.glow-card:hover img {
+  transform: scale(1.045);
+  filter: saturate(1.12) contrast(1.06);
+}
+
 .hero-grid {
   background-image:
     radial-gradient(circle at 50% 0%, oklch(0.72 0.15 205 / 0.2), transparent 28rem),
@@ -304,6 +404,17 @@
   }
 }
 
+@keyframes role-pop {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @layer utilities {
   @keyframes animate-fade-in {
     animation: fade-in 0.6s ease-out forwards;
@@ -320,5 +431,26 @@
   .animate-slide-in-left {
     animation: slide-in-left 0.5s ease-out forwards;
     opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+
+  .pointer-spotlight {
+    display: none;
   }
 }

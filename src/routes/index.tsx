@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import avatar from "@/assets/avatar.png";
 import pNeural from "@/assets/project-neural.jpg";
 import pChat from "@/assets/project-chatbot.jpg";
@@ -60,6 +60,100 @@ const projects = [
     img: pData,
   },
 ];
+
+const heroRoles = ["AI agents", "RAG systems", "voice automation", "workflow copilots"];
+
+function PortfolioEffects() {
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    let frameId = 0;
+
+    const updateProgress = () => {
+      frameId = 0;
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      setScrollProgress(maxScroll > 0 ? Math.min((window.scrollY / maxScroll) * 100, 100) : 0);
+    };
+
+    const requestUpdate = () => {
+      if (!frameId) frameId = window.requestAnimationFrame(updateProgress);
+    };
+
+    updateProgress();
+    window.addEventListener("scroll", requestUpdate, { passive: true });
+    window.addEventListener("resize", requestUpdate);
+
+    return () => {
+      window.removeEventListener("scroll", requestUpdate);
+      window.removeEventListener("resize", requestUpdate);
+      if (frameId) window.cancelAnimationFrame(frameId);
+    };
+  }, []);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    const handlePointerMove = (event: PointerEvent) => {
+      root.style.setProperty("--pointer-x", `${event.clientX}px`);
+      root.style.setProperty("--pointer-y", `${event.clientY}px`);
+      root.classList.add("has-pointer");
+    };
+
+    window.addEventListener("pointermove", handlePointerMove, { passive: true });
+    return () => window.removeEventListener("pointermove", handlePointerMove);
+  }, []);
+
+  useEffect(() => {
+    const revealTargets = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"));
+
+    if (!("IntersectionObserver" in window)) {
+      revealTargets.forEach((target) => target.classList.add("is-visible"));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        });
+      },
+      { rootMargin: "0px 0px -80px", threshold: 0.14 },
+    );
+
+    revealTargets.forEach((target) => observer.observe(target));
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <>
+      <div
+        className="scroll-progress"
+        style={{ transform: `scaleX(${scrollProgress / 100})` }}
+        aria-hidden="true"
+      />
+      <div className="pointer-spotlight" aria-hidden="true" />
+    </>
+  );
+}
+
+function HeroRoleRotator() {
+  const [roleIndex, setRoleIndex] = useState(0);
+
+  useEffect(() => {
+    const id = window.setInterval(
+      () => setRoleIndex((current) => (current + 1) % heroRoles.length),
+      2400,
+    );
+    return () => window.clearInterval(id);
+  }, []);
+
+  return (
+    <span className="hero-rotator" key={heroRoles[roleIndex]}>
+      {heroRoles[roleIndex]}
+    </span>
+  );
+}
 
 function BookCallDialog({ children }: { children: ReactNode }) {
   const today = new Date();
@@ -435,7 +529,11 @@ function Nav() {
 
 function Hero() {
   return (
-    <section id="home" className="relative overflow-hidden px-4 pb-18 pt-36 text-center">
+    <section
+      id="home"
+      className="relative overflow-hidden px-4 pb-18 pt-36 text-center"
+      data-reveal
+    >
       <div className="hero-grid absolute inset-x-0 top-0 -z-10 mx-auto h-[740px] max-w-7xl opacity-80" />
       <div className="absolute left-1/2 top-32 -z-10 h-72 w-72 -translate-x-1/2 rounded-full bg-cyan-400/10 blur-3xl" />
       <div className="relative mx-auto h-[156px] w-[156px]">
@@ -459,6 +557,9 @@ function Hero() {
         <span className="text-white">Alex Carter</span>{" "}
         <span className="text-gradient">builds the intelligence layer</span>
       </h1>
+      <p className="mx-auto mt-4 flex min-h-9 max-w-xl flex-wrap items-center justify-center gap-2 text-xs uppercase tracking-[0.24em] text-cyan-100/80">
+        Currently shaping <HeroRoleRotator />
+      </p>
       <p className="mx-auto mt-5 max-w-2xl text-sm leading-7 text-muted-foreground md:text-base">
         Full-stack AI engineer for agentic systems, RAG control rooms, voice automation, and
         cloud-deployed SaaS. Cold business logic, cinematic interfaces, measurable operational
@@ -539,7 +640,7 @@ function Hero() {
 
 function About() {
   return (
-    <section id="about" className="max-w-5xl mx-auto px-4 py-16">
+    <section id="about" className="max-w-5xl mx-auto px-4 py-16" data-reveal>
       <div className="grid gap-5 lg:grid-cols-[1.1fr_0.9fr] animate-fade-in">
         <div className="rounded-[32px] border border-white/10 bg-slate-950/80 p-6 shadow-[0_20px_60px_rgba(15,23,42,0.35)] transition-all duration-500 hover:shadow-[0_20px_80px_rgba(59,130,246,0.15)]">
           <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground mb-3">
@@ -785,7 +886,7 @@ function About() {
 
 function Projects() {
   return (
-    <section id="projects" className="max-w-5xl mx-auto px-4 py-16">
+    <section id="projects" className="max-w-5xl mx-auto px-4 py-16" data-reveal>
       <div className="text-center mb-12">
         <p className="text-xs tracking-[0.2em] text-muted-foreground">PORTFOLIO</p>
         <h2 className="text-4xl md:text-5xl font-bold mt-2">
@@ -797,7 +898,12 @@ function Projects() {
       </div>
       <div className="grid md:grid-cols-2 gap-5">
         {projects.map((p, i) => (
-          <article key={p.title} className="glow-card rounded-3xl p-5 hover:glow-card-hover group">
+          <article
+            key={p.title}
+            className="glow-card rounded-3xl p-5 hover:glow-card-hover group reveal-card"
+            data-reveal
+            style={{ transitionDelay: `${i * 80}ms` }}
+          >
             <div className="flex items-start justify-between text-xs text-muted-foreground mb-3">
               <span>0{i + 1} — CASE STUDY</span>
               <ArrowUpRight className="w-4 h-4 group-hover:text-primary transition" />
@@ -841,7 +947,7 @@ function Projects() {
 
 function Skills() {
   return (
-    <section id="skills" className="max-w-5xl mx-auto px-4 py-16 text-center">
+    <section id="skills" className="max-w-5xl mx-auto px-4 py-16 text-center" data-reveal>
       <p className="text-xs tracking-[0.2em] text-muted-foreground">TECH STACK</p>
       <h2 className="text-4xl md:text-5xl font-bold mt-2">
         My <span className="text-gradient">Skills</span>
@@ -878,7 +984,7 @@ function Explore() {
     },
   ];
   return (
-    <section className="max-w-5xl mx-auto px-4 py-16 text-center">
+    <section className="max-w-5xl mx-auto px-4 py-16 text-center" data-reveal>
       <h2 className="text-4xl md:text-5xl font-bold">
         More to <span className="text-gradient">Explore</span>
       </h2>
@@ -887,7 +993,7 @@ function Explore() {
       </p>
       <div className="grid md:grid-cols-3 gap-5 mt-10 text-left">
         {cards.map((c) => (
-          <div key={c.label} className="glow-card rounded-3xl p-6">
+          <div key={c.label} className="glow-card rounded-3xl p-6 reveal-card" data-reveal>
             <c.icon className={`w-6 h-6 ${c.color}`} />
             <h3 className="font-semibold mt-3">{c.label}</h3>
             <p className="text-sm text-muted-foreground mt-1">{c.desc}</p>
@@ -901,7 +1007,7 @@ function Explore() {
 
 function Contact() {
   return (
-    <section id="contact" className="max-w-5xl mx-auto px-4 py-16">
+    <section id="contact" className="max-w-5xl mx-auto px-4 py-16" data-reveal>
       <div className="glow-card rounded-3xl p-10 text-center">
         <h2 className="text-3xl md:text-4xl font-bold">
           Let's build <span className="text-gradient">something intelligent</span>
@@ -942,6 +1048,7 @@ function Contact() {
 function Index() {
   return (
     <main className="min-h-screen">
+      <PortfolioEffects />
       <Nav />
       <Hero />
       <About />
