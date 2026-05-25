@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 import avatar from "@/assets/avatar.png";
 import pNeural from "@/assets/project-neural.jpg";
 import pChat from "@/assets/project-chatbot.jpg";
@@ -24,6 +24,8 @@ import {
   Linkedin,
   Mail,
   ArrowUpRight,
+  SendHorizontal,
+  LoaderCircle,
   BookOpen,
   Trophy,
   Link2,
@@ -62,6 +64,22 @@ const projects = [
 ];
 
 const heroRoles = ["AI agents", "RAG systems", "voice automation", "workflow copilots"];
+
+type ChatMessage = {
+  role: "assistant" | "user";
+  text: string;
+};
+
+const initialChatMessages: ChatMessage[] = [
+  {
+    role: "assistant",
+    text: "Hi, I am your AI project copilot. Tell me what you want to build, automate, or improve.",
+  },
+  {
+    role: "assistant",
+    text: "I can help scope agents, RAG systems, workflow automation, and production AI apps.",
+  },
+];
 
 function PortfolioEffects() {
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -551,6 +569,98 @@ function Nav() {
 }
 
 function Hero() {
+  const [chatInput, setChatInput] = useState("");
+  const [chatMessages, setChatMessages] = useState(initialChatMessages);
+  const [isSendingChat, setIsSendingChat] = useState(false);
+  const chatScrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!chatScrollRef.current) return;
+    chatScrollRef.current.scrollTop = chatScrollRef.current.scrollHeight;
+  }, [chatMessages, isSendingChat]);
+
+  const readChatResponse = async (response: Response) => {
+    const contentType = response.headers.get("content-type") ?? "";
+
+    if (contentType.includes("application/json")) {
+      const payload = await response.json();
+      if (typeof payload === "string") return payload;
+      if (!payload || typeof payload !== "object") return "";
+
+      const data = payload as {
+        reply?: unknown;
+        message?: unknown;
+        response?: unknown;
+        content?: unknown;
+        answer?: unknown;
+        choices?: Array<{ message?: { content?: unknown }; text?: unknown }>;
+      };
+
+      const direct =
+        data.reply ?? data.message ?? data.response ?? data.content ?? data.answer ?? undefined;
+      if (typeof direct === "string") return direct;
+
+      const choice = data.choices?.[0];
+      if (typeof choice?.message?.content === "string") return choice.message.content;
+      if (typeof choice?.text === "string") return choice.text;
+      return "";
+    }
+
+    return response.text();
+  };
+
+  const sendHeroMessage = async () => {
+    const message = chatInput.trim();
+    if (!message || isSendingChat) return;
+
+    const nextMessages: ChatMessage[] = [...chatMessages, { role: "user", text: message }];
+    setChatMessages(nextMessages);
+    setChatInput("");
+    setIsSendingChat(true);
+
+    try {
+      const response = await fetch("http://localhost:3000/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message,
+          messages: nextMessages.map(({ role, text }) => ({ role, content: text })),
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Chat server responded with ${response.status}`);
+      }
+
+      const reply = (await readChatResponse(response)).trim();
+      setChatMessages((current) => [
+        ...current,
+        {
+          role: "assistant",
+          text: reply || "I received your message, but the server returned an empty response.",
+        },
+      ]);
+    } catch (error) {
+      console.error("Chat request failed:", error);
+      setChatMessages((current) => [
+        ...current,
+        {
+          role: "assistant",
+          text: "I could not reach the chat server. Please make sure http://localhost:3000/api/chat is running.",
+        },
+      ]);
+    } finally {
+      setIsSendingChat(false);
+    }
+  };
+
+  const handleChatKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      sendHeroMessage();
+    }
+  };
+
   return (
     <section
       id="home"
@@ -592,69 +702,100 @@ function Hero() {
 
       <div className="hero-console-arch mx-auto mt-10 max-w-2xl rounded-[28px] border border-cyan-300/20 bg-slate-950/70 p-6 text-left shadow-[0_28px_90px_rgba(3,7,18,0.55),0_0_55px_rgba(34,211,238,0.08)] backdrop-blur-xl">
         <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div>
               <p className="text-[11px] uppercase tracking-[0.28em] text-cyan-200/80">
-                Strategic console
-              </p>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Select an initiative or transmit a brief.
+                AI chatbot model
               </p>
             </div>
-            <div className="flex items-center gap-1.5">
-              <span className="h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_14px_rgba(103,232,249,0.9)]" />
-              <span className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
-                Online
-              </span>
+            <div className="flex flex-col gap-2 lg:items-end">
+              <div className="flex flex-wrap gap-2 lg:justify-end">
+                {["Roadmap", "Pricing", "Case files", "Contact"].map((t) => (
+                  <button
+                    key={t}
+                    className="rounded-full border border-cyan-300/20 bg-cyan-300/5 px-3 py-1.5 text-xs font-medium text-cyan-50 transition hover:border-cyan-300/60 hover:bg-cyan-300/10"
+                  >
+                    {t}
+                  </button>
+                ))}
+              </div>
+              <div className="flex items-center gap-1.5 lg:justify-end">
+                <span className="h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_14px_rgba(103,232,249,0.9)]" />
+                <span className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
+                  Online
+                </span>
+              </div>
             </div>
           </div>
-          <div className="flex flex-wrap gap-2">
-            {["Roadmap", "Pricing", "Case files", "Contact"].map((t) => (
-              <button
-                key={t}
-                className="rounded-full border border-cyan-300/20 bg-cyan-300/5 px-3 py-1.5 text-xs font-medium text-cyan-50 transition hover:border-cyan-300/60 hover:bg-cyan-300/10"
-              >
-                {t}
-              </button>
-            ))}
-          </div>
-          <div className="flex items-center gap-3 rounded-2xl border border-cyan-300/20 bg-slate-950/80 px-4 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
-            <div className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-violet-300/25 bg-violet-400/10 text-violet-200">
-              <Brain className="h-4 w-4" />
+          <div className="chat-dialogue-space h-[22rem] rounded-[22px] border border-cyan-300/15 bg-slate-950/55 p-3 sm:h-[24rem]">
+            <div
+              ref={chatScrollRef}
+              className="flex h-full flex-col gap-3 overflow-auto pr-1 hide-scrollbar"
+            >
+              {chatMessages.map((message, index) => (
+                <div
+                  key={`${message.role}-${index}`}
+                  className={`chat-message chat-message--${message.role} flex ${
+                    message.role === "user" ? "justify-end" : "justify-start"
+                  }`}
+                >
+                  <div
+                    className={`max-w-[88%] rounded-2xl px-4 py-3 text-sm leading-6 shadow-[0_14px_40px_rgba(3,7,18,0.18)] ${
+                      message.role === "user"
+                        ? "bg-primary text-primary-foreground"
+                        : "border border-cyan-300/15 bg-slate-900/80 text-muted-foreground"
+                    }`}
+                  >
+                    <p className="whitespace-pre-wrap">{message.text}</p>
+                  </div>
+                </div>
+              ))}
+              {isSendingChat && (
+                <div className="chat-message chat-message--assistant flex justify-start">
+                  <div className="chat-thinking rounded-2xl border border-cyan-300/15 bg-slate-900/80 px-4 py-3 text-sm leading-6 text-muted-foreground shadow-[0_14px_40px_rgba(3,7,18,0.18)]">
+                    <span />
+                    <span />
+                    <span />
+                  </div>
+                </div>
+              )}
             </div>
-            <input
-              className="min-w-0 flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground/60"
-              placeholder="Transmit business objective..."
-            />
+          </div>
+          <div className="chat-composer flex items-end gap-3 rounded-2xl border border-cyan-300/20 bg-slate-950/80 px-4 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
+            <div className="min-w-0 flex-1">
+              <textarea
+                value={chatInput}
+                onChange={(event) => setChatInput(event.target.value)}
+                onKeyDown={handleChatKeyDown}
+                rows={2}
+                disabled={isSendingChat}
+                className="min-h-[3rem] w-full resize-none bg-transparent text-sm leading-6 text-foreground outline-none placeholder:text-muted-foreground/60"
+                placeholder="Message the AI chatbot..."
+              />
+              {chatInput.length > 0 && (
+                <div className="mt-2 flex flex-wrap gap-2 text-[10px] uppercase tracking-[0.18em] text-muted-foreground/70">
+                  <span className="rounded-full border border-cyan-300/15 px-2 py-1">
+                    Enter send
+                  </span>
+                  <span className="rounded-full border border-cyan-300/15 px-2 py-1">
+                    Shift+Enter line
+                  </span>
+                </div>
+              )}
+            </div>
             <button
-              className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground shadow-[0_0_30px_rgba(34,211,238,0.24)] transition hover:scale-[1.04]"
+              type="button"
+              onClick={sendHeroMessage}
+              disabled={!chatInput.trim() || isSendingChat}
+              className="chat-send-led grid h-11 w-11 shrink-0 place-items-center rounded-full bg-cyan-300 text-slate-950 shadow-[0_0_30px_rgba(34,211,238,0.24)] transition hover:scale-[1.04] disabled:cursor-not-allowed disabled:opacity-45"
               title="Send message"
             >
-              <ArrowUpRight className="h-5 w-5" />
+              {isSendingChat ? (
+                <LoaderCircle className="chat-send-spinner h-5 w-5" />
+              ) : (
+                <SendHorizontal className="h-5 w-5" />
+              )}
             </button>
-          </div>
-          <div className="mt-4 flex flex-wrap items-center gap-3">
-            {["LLM", "Voice", "RAG", "Automation", "Cloud"].map((tag) => (
-              <span
-                key={tag}
-                className="inline-flex items-center rounded-full border border-cyan-300/15 bg-slate-950/80 px-3 py-1 text-[11px] uppercase tracking-[0.22em] text-muted-foreground transition hover:border-cyan-300/50 hover:text-cyan-100"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-          <div className="mt-6 flex flex-wrap items-center gap-3">
-            <BookCallDialog>
-              <button className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-[0_0_30px_rgba(34,211,238,0.2)] transition hover:-translate-y-0.5">
-                Schedule briefing
-              </button>
-            </BookCallDialog>
-            <a
-              href="#projects"
-              className="inline-flex items-center gap-2 rounded-full border border-cyan-300/20 bg-slate-950/80 px-4 py-2.5 text-sm text-muted-foreground transition hover:border-cyan-300/60 hover:text-cyan-100"
-            >
-              View systems
-            </a>
           </div>
         </div>
       </div>
